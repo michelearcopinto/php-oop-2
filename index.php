@@ -1,77 +1,8 @@
 <?php
 
-class Product
-{
-    protected $name;
-    protected $price;
-    protected $category;
-
-    public function __construct($name, $price, $category)
-    {
-        $this->name = $name;
-        $this->price = $price;
-        $this->category = $category;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    public function getCategory()
-    {
-        return $this->category;
-    }
-}
-
-
-abstract class AnimalProduct extends Product
-{
-    protected $animalType;
-
-    public function __construct($name, $price, $category, $animalType)
-    {
-        parent::__construct($name, $price, $category);
-        $this->animalType = $animalType;
-    }
-
-    public function getAnimalType()
-    {
-        return $this->animalType;
-    }
-}
-
-
-class FoodProduct extends AnimalProduct
-{
-    public function __construct($name, $price, $category, $animalType)
-    {
-        parent::__construct($name, $price, $category, $animalType);
-    }
-}
-
-// Sottoclasse per i giocattoli
-class ToyProduct extends AnimalProduct
-{
-    public function __construct($name, $price, $category, $animalType)
-    {
-        parent::__construct($name, $price, $category, $animalType);
-    }
-}
-
-
-class ShelterProduct extends AnimalProduct
-{
-    public function __construct($name, $price, $category, $animalType)
-    {
-        parent::__construct($name, $price, $category, $animalType);
-    }
-}
+include './product.php';
+include './animal_product.php';
+include './sub_products.php';
 
 $products = [];
 
