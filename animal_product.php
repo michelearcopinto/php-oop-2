@@ -4,9 +4,9 @@ abstract class AnimalProduct extends Product
 {
     protected $animalType;
 
-    public function __construct($name, $price, $category, $animalType)
+    public function __construct($name, $price, $animalType)
     {
-        parent::__construct($name, $price, $category);
+        parent::__construct($name, $price);
         $this->animalType = $animalType;
     }
 

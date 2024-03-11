@@ -1,25 +1,27 @@
 <?php
 
+include './OutOfStockException.php';
+include './trait.php';
 include './product.php';
 include './animal_product.php';
 include './sub_products.php';
 
 $products = [];
 
-$products[] = new FoodProduct("Cibo per cani", 20.99, "Food", "Cane");
-$products[] = new FoodProduct("Cibo per gatti", 18.99, "Food", "Gatto");
-$products[] = new FoodProduct("Snack per cani", 10.50, "Food", "Cane");
-$products[] = new FoodProduct("Snack per gatti", 8.50, "Food", "Gatto");
+$products[] = new FoodProduct("Cibo per cani", 20.99, "Cane");
+$products[] = new FoodProduct("Cibo per gatti", 18.99, "Gatto");
+$products[] = new FoodProduct("Snack per cani", 10.50, "Cane");
+$products[] = new FoodProduct("Snack per gatti", 8.50, "Gatto");
 
-$products[] = new ToyProduct("Pallina per cani", 5.99, "Game", "Cane");
-$products[] = new ToyProduct("Pallina per gatti", 4.50, "Game", "Gatto");
-$products[] = new ToyProduct("Giocattolo per cani", 15.99, "Game", "Cane");
-$products[] = new ToyProduct("Giocattolo per gatti", 12.50, "Game", "Gatto");
+$products[] = new ToyProduct("Pallina per cani", 5.99, "Cane");
+$products[] = new ToyProduct("Pallina per gatti", 4.50, "Gatto");
+$products[] = new ToyProduct("Giocattolo per cani", 15.99, "Cane");
+$products[] = new ToyProduct("Giocattolo per gatti", 12.50, "Gatto");
 
-$products[] = new ShelterProduct("Cuccia per cani", 50.99, "Product", "Cane");
-$products[] = new ShelterProduct("Cuccia per gatti", 40.50, "Product", "Gatto");
-$products[] = new ShelterProduct("Tana per cani", 65.99, "Product", "Cane");
-$products[] = new ShelterProduct("Tana per gatti", 55.50, "Product", "Gatto");
+$products[] = new ShelterProduct("Cuccia per cani", 50.99, "Cane");
+$products[] = new ShelterProduct("Cuccia per gatti", 40.50, "Gatto");
+$products[] = new ShelterProduct("Tana per cani", 65.99, "Cane");
+$products[] = new ShelterProduct("Tana per gatti", 55.50, "Gatto");
 
 ?>
 
@@ -42,6 +44,34 @@ $products[] = new ShelterProduct("Tana per gatti", 55.50, "Product", "Gatto");
 
             foreach ($products as $product) {
 
+                $category_name;
+
+                if (get_class($product) === 'FoodProduct') {
+
+                    $category_name = 'Food';
+                } else if (get_class($product) === 'ToyProduct') {
+
+                    $category_name = 'Game';
+                } else if (get_class($product) === 'ShelterProduct') {
+
+                    $category_name = 'Product';
+                }
+
+                $rand_num = rand(0, 40);
+                $stock_product = $product->setQuantity($rand_num);
+                $class_stock;
+
+                if ($rand_num < 10) {
+
+                    $class_stock = 'text-danger';
+                } else if ($rand_num < 25) {
+
+                    $class_stock = 'text-warning';
+                } else if ($rand_num > 25) {
+
+                    $class_stock = 'text-success';
+                }
+
                 echo
                 "<div class='card col-4'>
                     <img class='card-img-top' src='https://picsum.photos/200/300' alt='Title' />
@@ -49,11 +79,24 @@ $products[] = new ShelterProduct("Tana per gatti", 55.50, "Product", "Gatto");
                         <h4 class='card-title'>{$product->getName()}</h4>
                         <p class='card-text'>{$product->getPrice()}€</p>
                         <div class='d-flex justify-content-between'>
-                            <span class='card-text'>Type: {$product->getCategory()}</span>
-                            <span class='card-text'>{$product->getAnimalType()}</span>                       
-                        </div>
-                    </div>
-                </div>";
+                            <span class='card-text'>Type: {$category_name}</span>
+                            <span class='card-text'>{$product->getAnimalType()}</span>";
+
+                try {
+                    if ($rand_num === 0) {
+                        throw new OutOfStockException();
+                    }
+
+                    echo "<span class='{$class_stock}'>{$stock_product}</span>                       
+                                            </div>
+                                        </div>
+                                    </div>";
+                } catch (OutOfStockException $e) {
+                    echo "<span class='{$class_stock}'>{$e->getMessage()}</span>
+                            </div>
+                            </div>
+                        </div>";
+                }
             }
             ?>
         </div>
